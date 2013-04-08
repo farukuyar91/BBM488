@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>example</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+			<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+<script type="text/javascript">
+function searchTwitter(query) {
+    $.ajax({
+        url: 'http://search.twitter.com/search.json?' + jQuery.param(query),
+        dataType: 'jsonp',
+        success: function(data) {
+            var tweets = $('#tweets');
+            tweets.html('');
+            for (res in data['results']) {
+                tweets.append('<div id="tweets" style="border-bottom: 2px solid #000;"><img src="' + data['results'][res]['profile_image_url']+'" />'+'<b>'+data['results'][res]['from_user_name']+'</b>' 
+				+' @'+data['results'][res]['from_user']+ ' ('+data['results'][res]['created_at'] +')'
+				+' <br>'+data['results'][res]['text']
+				+ '</p></div><br />');        }
+        }
+    });
+}
+
+function start() {
+
+  
+        var params = {
+            q: $('#query').val(),
+            rpp: 5
+        };
+        searchTwitter(params);
+		setInterval(function(){searchTwitter(params)},10000);
+}
+</script>
+</head>
+<body>
+<div id="container">
+   <div style="padding: 20px;">
+        <input id="query" type="text" value="" />
+        <input id="submit" type="button" value="search!" onclick="start();"/>
+    </div>
+    <div id="tweets" style="padding: 20px;">
+        <p>No Tweet</p>
+    </div>
+	</div>
+</body>
+</html>
